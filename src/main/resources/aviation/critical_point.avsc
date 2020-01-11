@@ -1,0 +1,131 @@
+{
+    "type" : "record",
+    "name" : "critical_point",
+    "namespace" : "eu.datacron.synopses.aviation",
+    "doc" : "A critical point (a timestamped 3-dimensional spatial location) along the trajectory synopsis of a moving object (aircraft). Refer to datAcron Task 2.1 Specifications on Trajectory Detection & Summarization for more information. AVRO schema developed by Kostas Patroumpas (UPRC).",
+    "fields" : [
+    {
+    "name" : "timestamp",
+    "type" : "long",
+    "doc" : "UNIX epoch timestamp (i.e., milliseconds elapsed since 1970-01-01 00:00:00.000) assigned by the data source (valid time semantics). Required."
+    },
+    {
+    "name" : "id",
+    "type" : "string",
+    "doc" : "A globally unique identifier for the moving object (usually, an aircraft or flight identifier). Required."
+    },
+    {
+    "name" : "longitude",
+    "type" : "double",
+    "doc" : "Longitude coordinate in decimal degrees (georeference: WGS84) of this point location. Required."
+    },
+    {
+    "name" : "latitude",
+    "type" : "double",
+    "doc" : "Latitude coordinate in decimal degrees (georeference: WGS84) of this point location. Required."
+    },
+	{
+    "name" : "altitude",
+    "type" : "double",
+    "doc" : "Altitude coordinate in feet of this position. Required."
+    },
+    {
+    "name" : "annotation",
+    "doc" : "Characterization of this point location (i.e., as a critical point in the trajectory synopsis) with respect to mobility. Required.",
+    "type" : {
+           "type" : "record",
+           "name" : "critical_point_annotation",
+           "fields" : [
+              {"name" : "stop_start",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that the object has just stopped moving and became stationary at this position. Required.",
+               "default" : false},
+              {"name" : "stop_end",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that the object is no longer stationary and has just started moving (w.r.t. its previously known raw position). Required.",
+               "default" : false},
+              {"name" : "change_in_speed_start",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that speed over ground has just changed significantly (by a threshold parameter) w.r.t. the previously known speed. Required.",
+               "default" : false},
+              {"name" : "change_in_speed_end",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that speed over ground no longer diverges from the average speed over the most recent portion of the trajectory. Required.",
+               "default" : false},
+              {"name" : "slow_motion_start",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that this is the first position reported by the object when moving at a very low speed (below a threshold parameter). Required.",
+               "default" : false},
+              {"name" : "slow_motion_end",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that this is the last position reported by the object when moving at a very low speed (below a threshold parameter). Required.",
+               "default" : false},
+			  {"name" : "gap_start",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that communication with this object was lost at this position (i.e., this is the last location reported just before a communication gap). Required.",
+               "default" : false},
+              {"name" : "gap_end",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that communication with this object has been restored at this position (i.e., this is the first location reported after a communication gap). Required.",
+               "default" : false},
+			  {"name" : "change_in_heading",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that this is a turning point along the trajectory of this object, i.e., its actual heading over ground has just changed significantly (threshold angle parameter) w.r.t. its previous heading. Required.",
+               "default" : false},
+              {"name" : "change_in_altitude",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that at this location there is a significant change in altitude (flight level) by more than a given threshold w.r.t. the previous altitude of this object. Required.",
+               "default" : false},
+              {"name" : "takeoff",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that this is the first position reported by the object once it has gone from the ground to flying in the air. Required.",
+               "default" : false},
+              {"name" : "landing",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that this is the first position reported by the object once it has touched the ground. Required.",
+               "default" : false},
+              {"name" : "noise",
+               "type" : "boolean",
+			   "doc" : "Flag indicating that this location qualifies as noise and should be discarded. Noisy locations are never emitted as critical points. Required.",
+               "default" : false}
+            ]},
+            "default" : {}
+    },
+    {
+    "name" : "distance",
+    "type" : "double",
+    "doc" : "Travelled distance (in meters) of the moving object from its previously reported raw position (CAUTION! NOT the previously detected critical point!) to its current one. Required."
+    },
+	{
+    "name" : "rate_of_climb",
+    "type" : "double",
+    "doc" : "Rate of climb or descent (in feet/sec) of the moving object from its previously reported position to its current one. Required."
+    },
+    {
+    "name" : "speed",
+    "type" : "double",
+    "doc" : "Instantaneous speed over ground (in knots) of the moving object at this location (w.r.t. its previously reported raw position). Required."
+    },
+    {
+    "name" : "heading",
+    "type" : "double",
+    "doc" : "Instantaneous heading over ground (azimuth: degrees clockwise from North) of the moving object at this location (w.r.t. its previously reported raw position). Required."
+    },
+    {
+    "name" : "time_elapsed",
+    "type" : "long",
+    "doc" : "Time elapsed (as UNIX epoch interval in milliseconds) since the previously reported raw position of this object. Required."
+    },
+    {
+    "name" : "on_ground",
+    "type" : "string",
+    "doc" : "Flag indicating whether the moving object is on the ground ('-1' or 'G') or in the air ('0' or 'A'). Required."
+    },
+    {
+    "name" : "ingestion_timestamp",
+    "type" : "long",
+    "doc" : "UNIX epoch timestamp (i.e., milliseconds elapsed since 1970-01-01 00:00:00.000) assigned at the admission point to the module (transaction time used internally by the application). Optional."
+    }
+    ],
+    "version" : 0.7
+}
