@@ -46,7 +46,7 @@ under the License.
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<flink.version>0.10.2</flink.version>
-		<jackson.version>2.9.10.4</jackson.version>
+		<jackson.version>2.9.10.7</jackson.version>
 		<avro.version>1.8.1</avro.version>
 	</properties>
 
